@@ -1,77 +1,89 @@
 <?php
 session_start();
+include_once('connection.php');
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-
-// Conectar ao banco de dados
-include('db_connection.php');
-
-// Exemplo de processamento de compra
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user_id = $_SESSION['user_id'];
-    $lancheira_id = $_POST['lancheira_id'];
-    $preco = $_POST['preco'];
-    $opcao_pagamento = $_POST['opcao_pagamento'];
-
-    // Processar pagamento e salvar no banco de dados
-    $query = "INSERT INTO compras (user_id, lancheira_id, preco, opcao_pagamento) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("iids", $user_id, $lancheira_id, $preco, $opcao_pagamento);
-    $stmt->execute();
-
-    if ($stmt->affected_rows > 0) {
-        echo "Compra realizada com sucesso!";
-    } else {
-        echo "Erro ao processar a compra.";
-    }
-}
+// Verificar se o usuário é admin
+$isAdmin = isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin';
 ?>
-
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Shop</title>
+    <title>Image Carousel</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="images/generic_logo.png" alt="Logo">
+            <img src="images/generic_logo.png" alt="Logo da Empresa">
+            <span>Shop Name</span>
         </div>
-        <div class="login-btn">
+        <div class="header-buttons">
+            <?php if ($isAdmin): ?>
+                <a href="add_lancheira.php" class="btn">Adicionar Lancheira</a>
+            <?php endif; ?>
             <a href="login.php" class="btn">Login</a>
         </div>
     </header>
+    <div class="carousel">
 
-    <main>
-        <section class="carousel">
-            <div class="slides">
-                <div class="slide">
-                    <img src="lancheira1.jpg" alt="Lancheira 1">
-                    <h2>Lancheira 1</h2>
-                    <p>Preço: 10.00€</p>
-                    <button class="buy-btn" onclick="comprar(1)">Comprar</button>
-                </div>
-                <div class="slide">
-                    <img src="lancheira2.jpg" alt="Lancheira 2">
-                    <h2>Lancheira 2</h2>
-                    <p>Preço: 12.00€</p>
-                    <button class="buy-btn" onclick="comprar(2)">Comprar</button>
-                </div>
-                <!-- Adicione mais slides conforme necessário -->
+        <!-- Carousel Items -->
+        <div class="item active">
+            <div class="img-box">
+                <img src="images/image1.jpg" alt="Lancheira Tropical">
             </div>
-        </section>
-    </main>
+            <div class="info-box">
+                <div class="info-slider">
+                    <div class="info-item" style="--i:0;">
+                        <h2>Lancheira Tropical</h2>
+                        <p>Discover the Tropical Lunchbox, perfect for beach days and outdoor adventures.</p>
+                        <a href="#" class="btn">View More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="item">
+            <div class="img-box">
+                <img src="images/image2.jpg" alt="Lancheira Fitness">
+            </div>
+            <div class="info-box">
+                <div class="info-slider">
+                    <div class="info-item" style="--i:1;">
+                        <h2>Lancheira Fitness</h2>
+                        <p>The Fitness Lunchbox, designed for your active lifestyle with compartments for healthy snacks.</p>
+                        <a href="#" class="btn">View More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="img-box">
+                <img src="images/image3.jpg" alt="Lancheira Premium">
+            </div>
+            <div class="info-box">
+                <div class="info-slider">
+                    <div class="info-item" style="--i:2;">
+                        <h2>Lancheira Premium</h2>
+                        <p>Experience luxury with the Premium Lunchbox, crafted with high-quality materials.</p>
+                        <a href="#" class="btn">View More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ul class="thumb">
+            <li class="selected"><img src="images/image1.jpg" alt="Thumbnail 1"></li>
+            <li><img src="images/image2.jpg" alt="Thumbnail 2"></li>
+            <li><img src="images/image3.jpg" alt="Thumbnail 3"></li>
+        </ul>
+
+    </div>
+    
     <footer>
-        <p>Opções de pagamento: MBWay | Multibanco</p>
+        <p>&copy; 2024 - Shop Name | Todos os direitos reservados.</p>
     </footer>
 
     <script src="script.js"></script>
