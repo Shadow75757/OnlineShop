@@ -7,23 +7,26 @@ $isAdmin = isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Carousel</title>
+    <title>Online shop</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
         <div class="logo">
             <img src="images/generic_logo.png" alt="Logo da Empresa">
-            <span>Shop Name</span>
+            <h1>Shop Name</h1>
         </div>
         <div class="header-buttons">
             <?php if ($isAdmin): ?>
-                <a href="add_lancheira.php" class="btn">Adicionar Lancheira</a>
+                <a class="btnfos btnfos-4" href="add_lancheira.php" class="btn"><span>Adicionar Lancheira</span></a>
             <?php endif; ?>
-            <a href="login.php" class="btn">Login</a>
+            <a class="btnfos btnfos-5" href="login.php">Login</a>
+
         </div>
     </header>
     <div class="carousel">
@@ -31,7 +34,7 @@ $isAdmin = isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin';
         <!-- Carousel Items -->
         <div class="item active">
             <div class="img-box">
-                <img src="images/image1.jpg" alt="Lancheira Tropical">
+                <img src="images/image1.png" alt="Lancheira Tropical">
             </div>
             <div class="info-box">
                 <div class="info-slider">
@@ -46,7 +49,7 @@ $isAdmin = isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin';
 
         <div class="item">
             <div class="img-box">
-                <img src="images/image2.jpg" alt="Lancheira Fitness">
+                <img src="images/image2.png" alt="Lancheira Fitness">
             </div>
             <div class="info-box">
                 <div class="info-slider">
@@ -61,7 +64,7 @@ $isAdmin = isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin';
 
         <div class="item">
             <div class="img-box">
-                <img src="images/image3.jpg" alt="Lancheira Premium">
+                <img src="images/image3.png" alt="Lancheira Premium">
             </div>
             <div class="info-box">
                 <div class="info-slider">
@@ -75,17 +78,18 @@ $isAdmin = isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin';
         </div>
 
         <ul class="thumb">
-            <li class="selected"><img src="images/image1.jpg" alt="Thumbnail 1"></li>
-            <li><img src="images/image2.jpg" alt="Thumbnail 2"></li>
-            <li><img src="images/image3.jpg" alt="Thumbnail 3"></li>
+            <li class="selected"><img src="images/image1.png" alt="Thumbnail 1"></li>
+            <li><img src="images/image2.png" alt="Thumbnail 2"></li>
+            <li><img src="images/image3.png" alt="Thumbnail 3"></li>
         </ul>
 
     </div>
-    
+
     <footer>
         <p>&copy; 2024 - Shop Name | Todos os direitos reservados.</p>
     </footer>
 
     <script src="script.js"></script>
 </body>
+
 </html>
