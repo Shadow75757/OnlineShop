@@ -26,7 +26,6 @@ $isAdmin = isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin';
                 <a class="btnfos btnfos-4" href="add_lancheira.php" class="btn"><span>Adicionar Lancheira</span></a>
             <?php endif; ?>
             <a class="btnfos btnfos-5" href="login.php">Login</a>
-
         </div>
     </header>
     <div class="carousel">
