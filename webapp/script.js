@@ -6,48 +6,36 @@ let index = 0;
 
 thumbs.forEach((thumb, ind) => {
     thumb.addEventListener('click', (event) => {
-        setTimeout(() => {
-            document.querySelector('.thumb .selected').classList.remove('selected');
-            thumb.classList.add('selected');
-        }, 100);
+        // Remove selected class from the previously selected thumbnail
+        document.querySelector('.thumb .selected')?.classList.remove('selected');
+        thumb.classList.add('selected');
 
-        thumbs.forEach(thum => {
-            thum.classList.add('disabled');
+        // Disable all thumbnails during transition
+        thumbs.forEach(thum => thum.classList.add('disabled'));
+
+        // Handle previously active item
+        if (index !== ind) {
+            items[index].classList.add('previously-active');
             setTimeout(() => {
-                thum.classList.remove('disabled');
+                items[index].classList.remove('previously-active');
             }, 100);
-        });
-
-        let anySelected = false;
-        let current = event.target.parentElement.nextElementSibling;
-
-        while (current !== null && !anySelected) {
-            anySelected = anySelected || current.matches('.selected');
-            current = current.nextElementSibling;
-
-            if (anySelected) {
-                items[index].classList.add('previously-active');
-
-                setTimeout(() => {
-                    document.querySelector('.item.previously-active').classList.remove('previously-active');
-                }, 100);
-
-                index = ind;
-                items[index].classList.add('back-active');
-
-                setTimeout(() => {
-                    document.querySelector('.item.back-active').classList.remove('back-active');
-                }, 100);
-            }
         }
 
+        // Update index and active class
         index = ind;
+        items.forEach((item, i) => {
+            item.classList.toggle('active', i === index);
+            item.classList.toggle('back-active', i === index - 1);
+        });
 
+        // Update info slider transform
         infoSlider.forEach(slide => {
             slide.style.transform = `translateY(${index * -100}%)`;
         });
 
-        document.querySelector('.item.active').classList.remove('active');
-        items[index].classList.add('active');
+        // Re-enable thumbnails after transition
+        setTimeout(() => {
+            thumbs.forEach(thum => thum.classList.remove('disabled'));
+        }, 100);
     });
 });

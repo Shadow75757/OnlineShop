@@ -4,6 +4,21 @@ include_once('connection.php');
 
 // Verificar se o usuário é admin
 $isAdmin = isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin';
+$isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+
+// Fetch produtos from the database
+$query = "SELECT titulo, descricao, imagem, color FROM produtos";
+$result = mysqli_query($conn, $query);
+$produtos = [];
+
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $produtos[] = $row; // Store each produto in the produtos array
+    }
+} else {
+    echo "Error fetching products: " . mysqli_error($conn);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,69 +34,55 @@ $isAdmin = isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin';
     <header>
         <div class="logo">
             <img src="images/generic_logo.png" alt="Logo da Empresa">
-            <h1>Shop Name</h1>
         </div>
+        <nav>
+            <a href="#">Demos</a>
+            <a href="#">Addons</a>
+            <a href="#">Features</a>
+            <a href="#">Elements</a>
+            <a href="#">Compatibility</a>
+        </nav>
         <div class="header-buttons">
             <?php if ($isAdmin): ?>
-                <a class="btnfos btnfos-4" href="add_lancheira.php" class="btn"><span>Adicionar Lancheira</span></a>
+                <a class="btnfos btnfos-4" href="add_lancheira.php"><span>Adicionar Lancheira</span></a>
             <?php endif; ?>
-            <a class="btnfos btnfos-5" href="login.php">Login</a>
+            <?php if ($isLoggedIn): ?>
+                <div class="profile-icon">
+                    <span><?= strtoupper($username[0]) ?></span>
+                    <div class="profile-dropdown">
+                        <a href="profile.php">Profile</a>
+                        <a href="logout.php">Logout</a>
+                    </div>
+                </div>
+            <?php else: ?>
+                <a class="btnfos btnfos-5" href="login.php"><span>Login</span></a>
+            <?php endif; ?>
         </div>
     </header>
+
     <div class="carousel">
-
-        <!-- Carousel Items -->
-        <div class="item active">
-            <div class="img-box">
-                <img src="images/image1.png" alt="Lancheira Tropical">
-            </div>
-            <div class="info-box">
-                <div class="info-slider">
-                    <div class="info-item" style="--i:0;">
-                        <h2>Lancheira Tropical</h2>
-                        <p>Discover the Tropical Lunchbox, perfect for beach days and outdoor adventures.</p>
-                        <a href="#" class="btn">View More</a>
+        <?php foreach ($produtos as $index => $produto): ?>
+            <div class="item <?= $index === 0 ? 'active' : '' ?>">
+                <div class="img-box">
+                    <img src="images/<?= htmlspecialchars($produto['imagem']) ?>" alt="<?= htmlspecialchars($produto['titulo']) ?>">
+                </div>
+                <div class="info-box">
+                    <div class="info-slider">
+                        <div class="info-item" style="--i:<?= $index ?>;">
+                            <h2><?= htmlspecialchars($produto['titulo']) ?></h2>
+                            <p><?= htmlspecialchars($produto['descricao']) ?></p>
+                            <a href="#" class="btn">View More</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="item">
-            <div class="img-box">
-                <img src="images/image2.png" alt="Lancheira Fitness">
-            </div>
-            <div class="info-box">
-                <div class="info-slider">
-                    <div class="info-item" style="--i:1;">
-                        <h2>Lancheira Fitness</h2>
-                        <p>The Fitness Lunchbox, designed for your active lifestyle with compartments for healthy snacks.</p>
-                        <a href="#" class="btn">View More</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="item">
-            <div class="img-box">
-                <img src="images/image3.png" alt="Lancheira Premium">
-            </div>
-            <div class="info-box">
-                <div class="info-slider">
-                    <div class="info-item" style="--i:2;">
-                        <h2>Lancheira Premium</h2>
-                        <p>Experience luxury with the Premium Lunchbox, crafted with high-quality materials.</p>
-                        <a href="#" class="btn">View More</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php endforeach; ?>
 
         <ul class="thumb">
-            <li class="selected"><img src="images/image1.png" alt="Thumbnail 1"></li>
-            <li><img src="images/image2.png" alt="Thumbnail 2"></li>
-            <li><img src="images/image3.png" alt="Thumbnail 3"></li>
+            <?php foreach ($produtos as $produto): ?>
+                <li><img src="images/<?= htmlspecialchars($produto['imagem']) ?>" alt="Thumbnail"></li>
+            <?php endforeach; ?>
         </ul>
-
     </div>
 
     <footer>
